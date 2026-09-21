@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Un Ramo Realista de Flores Amarillas 🌻</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: radial-gradient(circle at center, #fffbe6 0%, #ffeaa7 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow-x: hidden;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #b38600;
+      font-size: 2.2rem;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+      margin-bottom: 6px;
+      animation: fadeIn 1.5s ease;
+    }
+
+    /* MENSAJE DEDICATORIA EDITABLE */
+    .mensaje-dedicatoria {
+      color: #7a5c00;
+      font-size: 1.15rem;
+      font-style: italic;
+      margin-bottom: 25px;
+      max-width: 85%;
+      line-height: 1.4;
+      animation: fadeIn 2s ease;
+    }
+
+    /* CONTENEDOR DEL RAMO */
+    .ramo-stage {
+      position: relative;
+      width: 320px;
+      height: 440px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      animation: popUp 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    /* TALLOS DE LAS FLORES */
+    .tallos-grupo {
+      position: absolute;
+      bottom: 20px;
+      width: 100px;
+      height: 200px;
+      z-index: 1;
+    }
+
+    .tallo-linea {
+      position: absolute;
+      width: 7px;
+      background: linear-gradient(to right, #2d5a27, #4a7c59, #2d5a27);
+      border-radius: 4px;
+    }
+    .t1 { height: 180px; left: 46px; transform: rotate(0deg); }
+    .t2 { height: 160px; left: 30px; transform: rotate(-12deg); }
+    .t3 { height: 160px; left: 62px; transform: rotate(12deg); }
+    .t4 { height: 140px; left: 18px; transform: rotate(-22deg); }
+    .t5 { height: 140px; left: 74px; transform: rotate(22deg); }
+
+    /* ENVOLTORIO DE PAPEL KRAFT */
+    .papel-ramo {
+      position: absolute;
+      bottom: 10px;
+      width: 0;
+      height: 0;
+      border-left: 95px solid transparent;
+      border-right: 95px solid transparent;
+      border-top: 190px solid #d4a373;
+      z-index: 4;
+      filter: drop-shadow(0px 10px 15px rgba(0,0,0,0.25));
+    }
+
+    .papel-ramo::after {
+      content: '';
+      position: absolute;
+      top: -190px;
+      left: -85px;
+      width: 0;
+      height: 0;
+      border-left: 85px solid transparent;
+      border-right: 85px solid transparent;
+      border-top: 175px solid #faedcd;
+    }
+
+    /* LAZO 3D MEJORADO */
+    .lazo-contenedor {
+      position: absolute;
+      bottom: 145px;
+      z-index: 6;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .lazo-centro {
+      width: 26px;
+      height: 26px;
+      background: linear-gradient(135deg, #d62828, #9e1c1c);
+      border-radius: 50%;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+      position: relative;
+      z-index: 3;
+    }
+
+    .lazo-oreja-izq, .lazo-oreja-der {
+      position: absolute;
+      top: -6px;
+      width: 45px;
+      height: 35px;
+      background: linear-gradient(135deg, #e63946, #b71c1c);
+      border-radius: 50% 50% 10% 50%;
+      box-shadow: inset 0 2px 4px rgba(255,255,255,0.3), 0 3px 6px rgba(0,0,0,0.2);
+    }
+    .lazo-oreja-izq { left: -38px; transform: rotate(-15deg); }
+    .lazo-oreja-der { right: -38px; transform: rotate(15deg) scaleX(-1); }
+
+    .cinta-caida-izq, .cinta-caida-der {
+      position: absolute;
+      top: 15px;
+      width: 16px;
+      height: 60px;
+      background: linear-gradient(to bottom, #d62828, #9e1c1c);
+      border-radius: 0 0 8px 8px;
+      box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+    }
+    .cinta-caida-izq { left: -12px; transform: rotate(20deg); }
+    .cinta-caida-der { right: -12px; transform: rotate(-20deg); }
+
+    /* FLORES REALISTAS (GIRASOLES) */
+    .flores-grupo {
+      position: absolute;
+      top: 10px;
+      width: 100%;
+      height: 270px;
+      z-index: 3;
+    }
+
+    .girasol {
+      position: absolute;
+      width: 85px;
+      height: 85px;
+      cursor: pointer;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    /* Ubicación estratégica de las flores */
+    .f1 { top: 0px; left: 118px; transform: scale(1.15); z-index: 5; }
+    .f2 { top: 40px; left: 50px; transform: rotate(-15deg); z-index: 4; }
+    .f3 { top: 40px; left: 185px; transform: rotate(15deg); z-index: 4; }
+    .f4 { top: 105px; left: 20px; transform: rotate(-30deg); z-index: 3; }
+    .f5 { top: 105px; left: 215px; transform: rotate(30deg); z-index: 3; }
+
+    /* Centro del Girasol con textura de semilla */
+    .centro-semilla {
+      position: absolute;
+      width: 34px;
+      height: 34px;
+      background: radial-gradient(circle, #3e2723 30%, #26140b 100%);
+      border: 2px dashed #5d4037;
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 3;
+      box-shadow: inset 0 0 6px rgba(0,0,0,0.8), 0 0 4px rgba(0,0,0,0.3);
+    }
+
+    /* Pétalos con gradiente realista */
+    .petalo-real {
+      position: absolute;
+      width: 16px;
+      height: 42px;
+      background: linear-gradient(to top, #ffb703, #ffd166, #fff3b0);
+      border-radius: 50% 50% 40% 40%;
+      top: 50%;
+      left: 50%;
+      transform-origin: center bottom;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    }
+
+    /* Distribución de 12 pétalos en capa */
+    .p1  { transform: translate(-50%, -100%) rotate(0deg); }
+    .p2  { transform: translate(-50%, -100%) rotate(30deg); }
+    .p3  { transform: translate(-50%, -100%) rotate(60deg); }
+    .p4  { transform: translate(-50%, -100%) rotate(90deg); }
+    .p5  { transform: translate(-50%, -100%) rotate(120deg); }
+    .p6  { transform: translate(-50%, -100%) rotate(150deg); }
+    .p7  { transform: translate(-50%, -100%) rotate(180deg); }
+    .p8  { transform: translate(-50%, -100%) rotate(210deg); }
+    .p9  { transform: translate(-50%, -100%) rotate(240deg); }
+    .p10 { transform: translate(-50%, -100%) rotate(270deg); }
+    .p11 { transform: translate(-50%, -100%) rotate(300deg); }
+    .p12 { transform: translate(-50%, -100%) rotate(330deg); }
+
+    /* HOJAS VERDES */
+    .hoja-real {
+      position: absolute;
+      width: 45px;
+      height: 25px;
+      background: linear-gradient(to right, #2d5a27, #4a7c59);
+      border-radius: 30px 0 30px 0;
+      z-index: 2;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    .h1 { top: 90px; left: 10px; transform: rotate(-45deg); }
+    .h2 { top: 90px; right: 10px; transform: rotate(45deg) scaleX(-1); }
+
+    /* BRILLOS / DESTELLES AL TOCAR LAS FLORES */
+    .brillo {
+      position: absolute;
+      pointer-events: none;
+      font-size: 1.2rem;
+      animation: flotarBrillo 1s ease-out forwards;
+      z-index: 10;
+    }
+
+    @keyframes flotarBrillo {
+      0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(0.5) rotate(0deg);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(var(--x), var(--y)) scale(1.5) rotate(180deg);
+      }
+    }
+
+    @keyframes popUp {
+      0% { transform: scale(0) translateY(100px); opacity: 0; }
+      100% { transform: scale(1) translateY(0); opacity: 1; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🌻 Un Ramo Especial para Ti 🌻</h1>
+  
+  <!-- DEDICATORIA EDITABLE (Cambia la frase aquí) -->
+  <p class="mensaje-dedicatoria">
+    "Gorda te hice estas flores amarillas con mucho amor. ¡Toca las flores del ramo para ver los destellos de luz!"
+  </p>
+
+  <div class="ramo-stage">
+
+    <!-- Tallos verdes visibles -->
+    <div class="tallos-grupo">
+      <div class="tallo-linea t1"></div>
+      <div class="tallo-linea t2"></div>
+      <div class="tallo-linea t3"></div>
+      <div class="tallo-linea t4"></div>
+      <div class="tallo-linea t5"></div>
+    </div>
+
+    <!-- Flores del ramo -->
+    <div class="flores-grupo">
+      <div class="hoja-real h1"></div>
+      <div class="hoja-real h2"></div>
+
+      <!-- Flor 1 -->
+      <div class="girasol f1" onclick="tocarFlorReal(event, this)">
+        <div class="centro-semilla"></div>
+        <div class="petalo-real p1"></div><div class="petalo-real p2"></div><div class="petalo-real p3"></div>
+        <div class="petalo-real p4"></div><div class="petalo-real p5"></div><div class="petalo-real p6"></div>
+        <div class="petalo-real p7"></div><div class="petalo-real p8"></div><div class="petalo-real p9"></div>
+        <div class="petalo-real p10"></div><div class="petalo-real p11"></div><div class="petalo-real p12"></div>
+      </div>
+
+      <!-- Flor 2 -->
+      <div class="girasol f2" onclick="tocarFlorReal(event, this)">
+        <div class="centro-semilla"></div>
+        <div class="petalo-real p1"></div><div class="petalo-real p2"></div><div class="petalo-real p3"></div>
+        <div class="petalo-real p4"></div><div class="petalo-real p5"></div><div class="petalo-real p6"></div>
+        <div class="petalo-real p7"></div><div class="petalo-real p8"></div><div class="petalo-real p9"></div>
+        <div class="petalo-real p10"></div><div class="petalo-real p11"></div><div class="petalo-real p12"></div>
+      </div>
+
+      <!-- Flor 3 -->
+      <div class="girasol f3" onclick="tocarFlorReal(event, this)">
+        <div class="centro-semilla"></div>
+        <div class="petalo-real p1"></div><div class="petalo-real p2"></div><div class="petalo-real p3"></div>
+        <div class="petalo-real p4"></div><div class="petalo-real p5"></div><div class="petalo-real p6"></div>
+        <div class="petalo-real p7"></div><div class="petalo-real p8"></div><div class="petalo-real p9"></div>
+        <div class="petalo-real p10"></div><div class="petalo-real p11"></div><div class="petalo-real p12"></div>
+      </div>
+
+      <!-- Flor 4 -->
+      <div class="girasol f4" onclick="tocarFlorReal(event, this)">
+        <div class="centro-semilla"></div>
+        <div class="petalo-real p1"></div><div class="petalo-real p2"></div><div class="petalo-real p3"></div>
+        <div class="petalo-real p4"></div><div class="petalo-real p5"></div><div class="petalo-real p6"></div>
+        <div class="petalo-real p7"></div><div class="petalo-real p8"></div><div class="petalo-real p9"></div>
+        <div class="petalo-real p10"></div><div class="petalo-real p11"></div><div class="petalo-real p12"></div>
+      </div>
+
+      <!-- Flor 5 -->
+      <div class="girasol f5" onclick="tocarFlorReal(event, this)">
+        <div class="centro-semilla"></div>
+        <div class="petalo-real p1"></div><div class="petalo-real p2"></div><div class="petalo-real p3"></div>
+        <div class="petalo-real p4"></div><div class="petalo-real p5"></div><div class="petalo-real p6"></div>
+        <div class="petalo-real p7"></div><div class="petalo-real p8"></div><div class="petalo-real p9"></div>
+        <div class="petalo-real p10"></div><div class="petalo-real p11"></div><div class="petalo-real p12"></div>
+      </div>
+    </div>
+
+    <!-- Envoltorio de papel kraft -->
+    <div class="papel-ramo"></div>
+
+    <!-- Lazo 3D -->
+    <div class="lazo-contenedor">
+      <div class="lazo-oreja-izq"></div>
+      <div class="lazo-oreja-der"></div>
+      <div class="lazo-centro"></div>
+      <div class="cinta-caida-izq"></div>
+      <div class="cinta-caida-der"></div>
+    </div>
+
+  </div>
+
+  <script>
+    // Animación de interacción y emisión de destellos
+    function tocarFlorReal(event, flor) {
+      // Pequeño pulso en la flor al tocar
+      flor.style.transform += ' scale(1.15)';
+      setTimeout(() => {
+        flor.style.transform = flor.style.transform.replace(' scale(1.15)', '');
+      }, 200);
+
+      // Generar destellos de luz alrededor del toque
+      const iconos = ['✨', '⭐', '💛', '🌟'];
+      for (let i = 0; i < 8; i++) {
+        const brillo = document.createElement('div');
+        brillo.className = 'brillo';
+        brillo.innerText = iconos[Math.floor(Math.random() * iconos.length)];
+        
+        brillo.style.left = `${event.clientX}px`;
+        brillo.style.top = `${event.clientY}px`;
+        
+        // Dirección aleatoria de la explosión de brillo
+        const desX = (Math.random() - 0.5) * 120 + 'px';
+        const desY = (Math.random() - 0.5) * 120 + 'px';
+        brillo.style.setProperty('--x', desX);
+        brillo.style.setProperty('--y', desY);
+        
+        document.body.appendChild(brillo);
+        setTimeout(() => brillo.remove(), 1000);
+      }
+    }
+  </script>
+</body>
+</html>
